@@ -1,0 +1,14 @@
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\cli\CliParser.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\cli\CliArgs.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\Parameter.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\core\SpecLoader.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\HttpMethod.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\ParameterType.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\SecurityScheme.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\ApiSpec.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\Endpoint.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\Main.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\domain\SecurityType.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\core\AppContainer.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\exceptions\SpecLoadException.java
+C:\Users\User\projects\VTB\VTB_API_Hack\src\main\java\com\apiscanner\loaders\OpenApiSpecLoader.java
