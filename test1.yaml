@@ -1,0 +1,193 @@
+openapi: 3.1.0
+info:
+  title: Test API with Detailed Endpoints
+  version: 1.0.0
+  description: A test API to demonstrate detailed endpoint parsing
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+paths:
+  /users:
+    get:
+      operationId: getUsers
+      summary: Get all users
+      description: Retrieves a list of all users in the system
+      parameters:
+        - name: limit
+          in: query
+          description: Number of users to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          description: Pagination offset
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+      tags:
+        - users
+        - public
+    post:
+      operationId: createUser
+      summary: Create a new user
+      description: Creates a new user in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+      security:
+        - apiKey: []
+      tags:
+        - users
+        - admin
+  /users/{id}:
+    get:
+      operationId: getUserById
+      summary: Get user by ID
+      description: Retrieves a specific user by their ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: integer
+            format: int64
+        - name: fields
+          in: query
+          description: Comma-separated list of fields to return
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+      tags:
+        - users
+    put:
+      operationId: updateUser
+      summary: Update user
+      description: Updates an existing user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+        '404':
+          description: User not found
+      security:
+        - apiKey: []
+      tags:
+        - users
+        - admin
+  /auth/login:
+    post:
+      operationId: login
+      summary: User login
+      description: Authenticate a user and return a token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  expiresIn:
+                    type: integer
+        '401':
+          description: Unauthorized
+      tags:
+        - auth
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+          enum: [user, admin, moderator]
+      required:
+        - username
+        - email
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

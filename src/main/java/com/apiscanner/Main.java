@@ -2,14 +2,15 @@ package com.apiscanner;
 
 import com.apiscanner.cli.CliArgs;
 import com.apiscanner.cli.CliParser;
-import com.apiscanner.core.AppContainer;
+import com.apiscanner.core.ReportGenerator;
 import com.apiscanner.core.SpecLoader;
 import com.apiscanner.domain.ApiSpec;
 import com.apiscanner.exceptions.SpecLoadException;
 import com.apiscanner.loaders.OpenApiSpecLoader;
+import com.apiscanner.reporters.JsonReportGenerator;
 
 import java.nio.file.Files;
-import java.util.List;
+import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,24 +21,22 @@ public class Main {
             CliArgs cliArgs = CliParser.parse(args);
             
             if (cliArgs.verbose()) {
-                System.out.println("📁 Output directory: " + cliArgs.outputDir());
-                System.out.println("📊 Report format: " + cliArgs.format());
+                System.out.println("🔧 Verbose mode enabled");
             }
             
             // Load API specification
             ApiSpec apiSpec = loadApiSpec(cliArgs);
             
-            System.out.println("✅ Successfully loaded API specification:");
-            System.out.println("   Title: " + apiSpec.title());
-            System.out.println("   Version: " + apiSpec.version());
-            System.out.println("   Endpoints: " + countEndpoints(apiSpec));
-            System.out.println("   Base URL: " + apiSpec.baseUrl());
-            
             // Create output directory
-            Files.createDirectories(cliArgs.outputDir());
+            Path outputDir = Path.of("./reports");
+            Files.createDirectories(outputDir);
             
-            System.out.println("🚀 Ready for security scanning...");
-            // Здесь будет интеграция с следующими модулями
+            // Generate JSON schema report
+            System.out.println("\n📊 Generating schema report...");
+            ReportGenerator reportGenerator = new JsonReportGenerator();
+            reportGenerator.generateReport(apiSpec, outputDir);
+            
+            System.out.println("✅ API schema analysis completed!");
             
         } catch (Exception e) {
             System.err.println("❌ Error: " + e.getMessage());
@@ -53,7 +52,7 @@ public class Main {
         
         if (cliArgs.hasSpecFile()) {
             if (cliArgs.verbose()) {
-                System.out.println("📄 Loading spec from file: " + cliArgs.specFile());
+                System.out.println("📄 Loading spec from file: " + cliArgs.specFile().toAbsolutePath());
             }
             return loader.loadFromFile(cliArgs.specFile());
         } else if (cliArgs.hasTargetUrl()) {
@@ -64,11 +63,5 @@ public class Main {
         } else {
             throw new IllegalStateException("No spec source provided");
         }
-    }
-    
-    private static int countEndpoints(ApiSpec apiSpec) {
-        return apiSpec.endpoints().values().stream()
-            .mapToInt(List::size)
-            .sum();
     }
 }

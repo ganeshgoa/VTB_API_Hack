@@ -1,4 +1,3 @@
-// exceptions/SpecLoadException.java
 package com.apiscanner.exceptions;
 
 public class SpecLoadException extends Exception {
